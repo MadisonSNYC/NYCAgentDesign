@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Text Animation Demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --neon-pink: #ff00ff;
+      --neon-blue: #00ffff;
+      --neon-purple: #9900ff;
+      --neon-yellow: #ffff00;
+      --dark-bg: #0a0a15;
+      --grid-color: rgba(0, 255, 255, 0.1);
+      --gold: #ffd700;
+      --gold-dark: #b8860b;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Orbitron', sans-serif;
+      background-color: var(--dark-bg);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+    
+    .animation-container {
+      width: 600px;
+      height: 300px;
+      border: 2px solid var(--neon-blue);
+      border-radius: 10px;
+      box-shadow: 
+        0 0 20px var(--neon-blue),
+        inset 0 0 20px rgba(0, 255, 255, 0.3),
+        0 0 40px rgba(255, 0, 255, 0.5),
+        0 10px 60px rgba(255, 0, 255, 0.7);
+      padding: 2rem;
+      position: relative;
+      background-color: rgba(10, 10, 21, 0.8);
+      overflow: hidden;
+      margin-bottom: 2rem;
+      /* Pink gradient shadow effect */
+      background: 
+        linear-gradient(rgba(10, 10, 21, 0.9), rgba(10, 10, 21, 0.95)),
+        radial-gradient(circle at center, rgba(255, 0, 255, 0.2), transparent 70%);
+    }
+    
+    .text-display {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+      text-align: center;
+    }
+    
+    .text-item {
+      margin: 0.5rem 0;
+      opacity: 0;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80%;
+    }
+    
+    .title {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: white;
+      text-shadow: 
+        0 0 5px #fff,
+        0 0 10px var(--neon-pink),
+        0 0 20px var(--neon-pink);
+    }
+    
+    .effect-text {
+      font-size: 1.8rem;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+    
+    .cta-button {
+      background-color: var(--neon-pink);
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 0.8rem 2rem;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      box-shadow: 0 0 15px rgba(255, 0, 255, 0.7);
+      text-shadow: 0 0 5px rgba(255, 255, 255, 0.7);
+      position: relative;
+      z-index: 10;
+    }
+    
+    .cta-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px rgba(255, 0, 255, 0.9);
+    }
+    
+    .char, .word, .line {
+      display: inline-block;
+    }
+
+    .letters {
+      display: inline-block;
+    }
+    
+    /* Wave effect for first text */
+    .wave-letter {
+      display: inline-block;
+      transform-origin: 50% 100%;
+    }
+    
+    /* Scale effect container */
+    .scale-text {
+      display: inline-block;
+    }
+    
+    /* Rainbow text effect */
+    .rainbow-text {
+      position: relative;
+      display: inline-block;
+    }
+    
+    .rainbow-text .gradient-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(to right, 
+        #ff0000, #ff7f00, #ffff00, 
+        #00ff00, #0000ff, #4b0082, #9400d3);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-fill-color: transparent;
+      opacity: 0;
+    }
+    
+    /* Layered color transitions */
+    .color-layer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      opacity: 0;
+    }
+    
+    .color-layer:nth-child(2) {
+      color: var(--neon-blue);
+      text-shadow: 0 0 5px var(--neon-blue);
+      transform: translateY(-3px);
+    }
+    
+    .color-layer:nth-child(3) {
+      color: var(--neon-pink);
+      text-shadow: 0 0 5px var(--neon-pink);
+      transform: translateY(3px);
+    }
+    
+    /* Creative Animation Text */
+    .creative-text {
+      position: relative;
+    }
+    
+    .creative-text .letter {
+      display: inline-block;
+      transform-origin: center;
+      text-shadow: 
+        0 0 5px #fff,
+        0 0 10px var(--neon-yellow),
+        0 0 15px var(--neon-yellow);
+    }
+    
+    /* Arcade style fireworks */
+    .fireworks-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    
+    .firework {
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      opacity: 0;
+      transform: scale(0);
+    }
+    
+    /* Gold arrow styles */
+    .arrows-container {
+      position: absolute;
+      bottom: 10px;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      opacity: 0;
+      z-index: 5;
+    }
+    
+    .golden-arrow {
+      width: 70%;
+      height: 120px;
+      position: relative;
+      background: linear-gradient(to bottom, var(--gold-dark), var(--gold), var(--gold-dark));
+      clip-path: polygon(
+        35% 0, 
+        65% 0, 
+        65% 70%, 
+        85% 70%, 
+        50% 100%, 
+        15% 70%, 
+        35% 70%
+      );
+      box-shadow: 
+        0 0 20px var(--gold),
+        0 0 30px var(--gold);
+    }
+    
+    .golden-arrow::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(to bottom right, 
+        rgba(255, 255, 255, 0.7) 0%, 
+        rgba(255, 255, 255, 0) 30%, 
+        rgba(255, 255, 255, 0) 70%, 
+        rgba(255, 215, 0, 0.5) 100%);
+      clip-path: inherit;
+    }
+  </style>
+</head>
+<body>
+  <div class="animation-container">
+    <div class="fireworks-container"></div>
+    
+    <div class="text-display">
+      <div class="title text-item" id="text1">Animate Your Text</div>
+      <div class="effect-text text-item" id="text2">Scale & Transform</div>
+      <div class="effect-text text-item" id="text3">
+        <span class="color-layer">Color Transitions</span>
+        <span class="color-layer">Color Transitions</span>
+        <span class="color-layer">Color Transitions</span>
+        <span class="rainbow-text">
+          <span class="original-text">Color Transitions</span>
+          <span class="gradient-overlay">Color Transitions</span>
+        </span>
+      </div>
+      <div class="effect-text text-item creative-text" id="text4">Creative Animations</div>
+    </div>
+    
+    <div class="arrows-container">
+      <div class="golden-arrow"></div>
+    </div>
+  </div>
+  
+  <button class="cta-button">Get Started Now</button>
+
+  <!-- Include anime.js library -->
+  <script src="./lib/anime.min.js"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Apply 15% speed increase to all animations
+      const speedFactor = 0.85; // 15% faster
+      
+      // Helper function to split text into letters
+      function splitTextIntoLetters(selector, className) {
+        const element = document.querySelector(selector);
+        if (!element) return;
+        
+        const text = element.textContent;
+        element.textContent = '';
+        
+        for (let i = 0; i < text.length; i++) {
+          const letter = document.createElement('span');
+          letter.className = className;
+          letter.textContent = text.charAt(i) === ' ' ? ' ' : text.charAt(i);
+          element.appendChild(letter);
+        }
+      }
+      
+      // Split text for wave animation
+      splitTextIntoLetters('#text1', 'wave-letter');
+      
+      // Split text for creative animation
+      splitTextIntoLetters('#text4', 'letter');
+      
+      // Create arcade-style fireworks
+      function createFireworks() {
+        const container = document.querySelector('.fireworks-container');
+        container.innerHTML = ''; // Clear any existing fireworks
+        
+        // Create 30 firework particles
+        for (let i = 0; i < 30; i++) {
+          const firework = document.createElement('div');
+          firework.className = 'firework';
+          
+          // Random colors for arcade style
+          const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'];
+          const randomColor = colors[Math.floor(Math.random() * colors.length)];
+          
+          firework.style.backgroundColor = randomColor;
+          firework.style.boxShadow = `0 0 8px ${randomColor}, 0 0 12px ${randomColor}`;
+          
+          // Position randomly within container
+          firework.style.left = Math.random() * 100 + '%';
+          firework.style.top = Math.random() * 100 + '%';
+          
+          container.appendChild(firework);
+        }
+      }
+      
+      // Create the initial fireworks elements
+      createFireworks();
+      
+      // Function to start all animations
+      function startAnimations() {
+        // Reset all animations
+        anime.remove(['.text-item', '.golden-arrow', '.cta-button', '.wave-letter', '.letter', '.gradient-overlay', '.firework', '.color-layer']);
+        
+        // Hide all text items initially
+        document.querySelectorAll('.text-item').forEach(item => {
+          item.style.opacity = '0';
+        });
+        
+        // Make arrow initially hidden
+        anime.set('.arrows-container', {
+          opacity: 0,
+          scale: 0.8
+        });
+        
+        // Create a timeline for the text animations
+        const textTimeline = anime.timeline({
+          easing: 'easeOutExpo'
+        });
+        
+        // First text animation with wave effect
+        textTimeline.add({
+          targets: '#text1',
+          opacity: [0, 1],
+          duration: 800 * speedFactor
+        })
+        .add({
+          targets: '#text1 .wave-letter',
+          translateY: function(el, i) {
+            return anime.random(-15, -30);
+          },
+          duration: 1500 * speedFactor,
+          delay: function(el, i) {
+            return 30 * i * speedFactor;
+          },
+          direction: 'alternate',
+          loop: 2,
+          easing: 'easeInOutSine'
+        })
+        // Fade out first text completely
+        .add({
+          targets: '#text1',
+          opacity: 0,
+          duration: 600 * speedFactor,
+          easing: 'easeOutExpo',
+          complete: function() {
+            // Reset any transforms
+            anime.set('#text1', {
+              translateY: 0,
+              translateX: '-50%'
+            });
+          }
+        })
+        
+        // Second text - Scale & Transform
+        .add({
+          targets: '#text2',
+          opacity: [0, 1],
+          translateY: 0,
+          translateX: '-50%',
+          duration: 800 * speedFactor
+        })
+        .add({
+          targets: '#text2',
+          scale: [0.5, 1.2, 0.8, 1],
+          duration: 2000 * speedFactor,
+          easing: 'easeInOutElastic(1, .5)'
+        })
+        // Fade out second text completely
+        .add({
+          targets: '#text2',
+          opacity: 0,
+          duration: 600 * speedFactor,
+          easing: 'easeOutExpo',
+          complete: function() {
+            // Reset any transforms
+            anime.set('#text2', {
+              scale: 1,
+              translateY: 0,
+              translateX: '-50%'
+            });
+          }
+        })
+        
+        // Third text - Color Transitions with layers and rainbow effect
+        .add({
+          targets: '#text3',
+          opacity: [0, 1],
+          translateY: 0,
+          translateX: '-50%',
+          duration: 800 * speedFactor
+        })
+        .add({
+          targets: '#text3 .color-layer',
+          opacity: [0, 1],
+          delay: anime.stagger(200 * speedFactor),
+          duration: 800 * speedFactor
+        })
+        .add({
+          targets: '#text3 .gradient-overlay',
+          opacity: 1,
+          width: ['0%', '100%'],
+          duration: 2000 * speedFactor,
+          easing: 'easeInOutSine'
+        })
+        // Add shimmer effect to layered text
+        .add({
+          targets: '#text3 .color-layer',
+          translateX: function(el, i) {
+            return [i * 3, -i * 3, i * 3];
+          },
+          translateY: function(el, i) {
+            return [i * 2, -i * 2, i * 2];
+          },
+          duration: 1500 * speedFactor,
+          easing: 'easeInOutSine',
+          direction: 'alternate',
+          loop: 2
+        }, '-=' + (2000 * speedFactor))
+        // Fade out third text completely
+        .add({
+          targets: '#text3',
+          opacity: 0,
+          duration: 600 * speedFactor,
+          easing: 'easeOutExpo',
+          complete: function() {
+            // Reset any transforms
+            anime.set('#text3', {
+              translateY: 0,
+              translateX: '-50%'
+            });
+            anime.set('#text3 .gradient-overlay', {
+              width: '0%',
+              opacity: 0
+            });
+            anime.set('#text3 .color-layer', {
+              opacity: 0,
+              translateX: 0,
+              translateY: 0
+            });
+          }
+        })
+        
+        // Fourth text - Creative Animation with arcade fireworks
+        .add({
+          targets: '#text4',
+          opacity: [0, 1],
+          translateY: 0,
+          translateX: '-50%',
+          duration: 800 * speedFactor,
+          complete: function() {
+            // Start fireworks when text appears
+            animeFireworks();
+          }
+        })
+        .add({
+          targets: '#text4 .letter',
+          rotateY: [90, 0],
+          opacity: [0, 1],
+          duration: 1200 * speedFactor,
+          delay: anime.stagger(50 * speedFactor),
+          easing: 'easeOutExpo'
+        })
+        .add({
+          targets: '#text4 .letter',
+          translateY: function(el, i) {
+            return anime.random(-15, -5);
+          },
+          scale: function(el, i) {
+            return 0.9 + (Math.random() * 0.4);
+          },
+          rotate: function() {
+            return anime.random(-15, 15);
+          },
+          color: function() {
+            const colors = ['#ff0000', '#ffff00', '#00ff00', '#00ffff', '#ff00ff'];
+            return colors[Math.floor(Math.random() * colors.length)];
+          },
+          textShadow: function() {
+            const colors = ['#ff0000', '#ffff00', '#00ff00', '#00ffff', '#ff00ff'];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            return `0 0 5px ${color}, 0 0 10px ${color}`;
+          },
+          duration: 1500 * speedFactor,
+          delay: anime.stagger(20 * speedFactor),
+          direction: 'alternate',
+          easing: 'easeInOutBack'
+        })
+        // Fade out fourth text completely before showing arrows
+        .add({
+          targets: '#text4',
+          opacity: 0,
+          duration: 600 * speedFactor,
+          easing: 'easeOutExpo'
+        }, '+=' + (2000 * speedFactor))
+        // Show golden arrow after text is gone
+        .add({
+          targets: '.arrows-container',
+          opacity: [0, 1],
+          scale: [0.8, 1],
+          duration: 800 * speedFactor,
+          easing: 'easeOutElastic(1, .5)'
+        })
+        // Animate the golden arrow
+        .add({
+          targets: '.golden-arrow',
+          translateY: ['-5%', '5%', '-5%'],
+          boxShadow: [
+            '0 0 20px var(--gold), 0 0 30px var(--gold)',
+            '0 0 30px var(--gold), 0 0 50px var(--gold)',
+            '0 0 20px var(--gold), 0 0 30px var(--gold)'
+          ],
+          duration: 2000 * speedFactor,
+          direction: 'alternate',
+          loop: 2,
+          easing: 'easeInOutSine'
+        }, '-=' + (600 * speedFactor))
+        // Keep arrow visible for a while
+        .add({
+          duration: 3000 * speedFactor,
+          complete: function() {
+            // Hide arrow
+            anime({
+              targets: '.arrows-container',
+              opacity: 0,
+              scale: 0.8,
+              duration: 600 * speedFactor,
+              easing: 'easeOutExpo',
+              complete: function() {
+                // Restart the whole animation
+                startAnimations();
+              }
+            });
+          }
+        });
+        
+        // Function to animate the arcade-style fireworks
+        function animeFireworks() {
+          // Animate fireworks explosion
+          anime({
+            targets: '.firework',
+            scale: [0, 1],
+            opacity: [0, 0.8, 0],
+            translateX: function() { return anime.random(-150, 150); },
+            translateY: function() { return anime.random(-150, 150); },
+            delay: anime.stagger(10 * speedFactor),
+            duration: function() { return anime.random(800, 1800) * speedFactor; },
+            easing: 'easeOutExpo',
+            complete: function() {
+              // Create new fireworks for next explosion
+              setTimeout(function() {
+                if (document.querySelector('#text4').style.opacity > 0) {
+                  createFireworks();
+                  animeFireworks();
+                }
+              }, 200 * speedFactor);
+            }
+          });
+        }
+        
+        // Add a pulsing glow effect to the CTA button
+        anime({
+          targets: '.cta-button',
+          boxShadow: [
+            '0 0 15px rgba(255, 0, 255, 0.7)',
+            '0 0 25px rgba(255, 0, 255, 0.9)',
+            '0 0 15px rgba(255, 0, 255, 0.7)'
+          ],
+          scale: [1, 1.03, 1],
+          duration: 2000 * speedFactor,
+          direction: 'alternate',
+          loop: true,
+          easing: 'easeInOutSine'
+        });
+      }
+      
+      // Start animations when page loads
+      startAnimations();
+      
+      // CTA button click handler
+      document.querySelector('.cta-button').addEventListener('click', function() {
+        alert('Starting your design journey now!');
+      });
+    });
+  </script>
+</body>
+</html> 
