@@ -1,11 +1,4 @@
 {
   "version": 2,
-  "outputDirectory": "public",
-  "routes": [
-    { "handle": "filesystem" },
-    { "src": "/(.*)", "dest": "/index.html" }
-  ],
-  "builds": [
-    { "src": "public/**/*", "use": "@vercel/static" }
-  ]
+  "public": true
 } 
