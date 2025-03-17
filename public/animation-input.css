@@ -1,0 +1,224 @@
+/* Animation Input Component Styles */
+:root {
+  --neon-pink: #ff00ff;
+  --neon-blue: #00ffff;
+  --neon-purple: #9900ff;
+  --neon-yellow: #ffff00;
+  --dark-bg: #0a0a15;
+  --darker-bg: #070711;
+  --grid-color: rgba(0, 255, 255, 0.1);
+}
+
+/* Main container */
+.animation-input-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto 2rem;
+  padding: 2rem;
+  font-family: 'Orbitron', sans-serif;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  z-index: 5;
+}
+
+/* Input area styling - simplified for more focus */
+.input-wrapper {
+  width: 100%;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  border-radius: 40px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+/* Prompt label */
+.prompt-label {
+  display: block;
+  font-size: 1rem;
+  color: var(--neon-blue);
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Input field */
+.animation-input {
+  width: 100%;
+  max-width: 800px;
+  background-color: rgba(15, 15, 30, 0.7);
+  color: white;
+  border: 2px solid var(--neon-pink);
+  padding: 1.2rem;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.2rem;
+  border-radius: 50px;
+  resize: none;
+  height: auto;
+  transition: all 0.3s ease;
+  text-align: center;
+  box-shadow: 
+    0 0 5px rgba(255, 0, 255, 0.3),
+    0 0 15px rgba(255, 0, 255, 0.1),
+    inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.animation-input:focus {
+  outline: none;
+  background-color: rgba(20, 20, 40, 0.9);
+  border-color: var(--neon-blue);
+  box-shadow: 
+    0 0 10px rgba(0, 255, 255, 0.5),
+    0 0 20px rgba(0, 255, 255, 0.3),
+    inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.animation-input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+  font-style: italic;
+}
+
+/* Status indicator */
+.status-indicator {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  margin: 0.5rem 0 1rem;
+  font-size: 0.85rem;
+  border-radius: 20px;
+  background-color: rgba(10, 10, 25, 0.7);
+  border: 1px solid var(--neon-blue);
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.status-indicator.active {
+  background-color: rgba(0, 255, 255, 0.1);
+  border-color: var(--neon-pink);
+  color: var(--neon-pink);
+  box-shadow: 0 0 10px rgba(255, 0, 255, 0.3);
+}
+
+/* Animation preview area */
+.animation-preview {
+  position: relative;
+  width: 100%;
+  height: 350px;
+  background-color: rgba(5, 5, 10, 0.8);
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 
+    0 0 20px rgba(0, 0, 0, 0.3),
+    0 0 10px rgba(255, 0, 255, 0.15),
+    inset 0 0 30px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 0, 255, 0.3);
+}
+
+/* Grid background for the preview area */
+.animation-preview::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    linear-gradient(var(--grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+  background-size: 20px 20px;
+  opacity: 0.3;
+  z-index: 0;
+}
+
+.preview-label {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 0.75rem;
+  color: var(--neon-blue);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  z-index: 2;
+}
+
+/* Canvas container for particles */
+.canvas-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+/* Particles */
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  background-color: var(--neon-pink);
+  filter: blur(1px);
+  z-index: 1;
+}
+
+.temp-particle {
+  animation: fadeOut 1.5s ease-out forwards;
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+  }
+}
+
+/* SVG animations area */
+.animation-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+}
+
+/* Path text styling */
+.path-text {
+  font-size: 14px;
+  fill: white;
+  opacity: 0.9;
+}
+
+/* Animation path styling */
+.animation-path {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .animation-input-container {
+    padding: 1rem;
+  }
+  
+  .animation-input {
+    padding: 1rem;
+    font-size: 1rem;
+  }
+  
+  .animation-preview {
+    height: 250px;
+  }
+}
+
+@media (max-width: 480px) {
+  .prompt-label {
+    font-size: 0.8rem;
+  }
+  
+  .animation-input {
+    padding: 0.8rem;
+    font-size: 0.9rem;
+  }
+  
+  .animation-preview {
+    height: 200px;
+  }
+} 
