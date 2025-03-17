@@ -14,8 +14,8 @@
     "lib"
   ],
   "scripts": {
-    "build": "node build && cp -r lib documentation src public/",
-    "vercel-build": "node build && cp -r lib documentation src public/"
+    "build": "node build",
+    "vercel-build": "node build"
   },
   "bugs": {
     "url": "https://github.com/juliangarnier/anime/issues"
